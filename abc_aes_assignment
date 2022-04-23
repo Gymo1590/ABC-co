@@ -1,0 +1,64 @@
+import java.util.Scanner;
+import java.util.Base64;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import javax.crypto.spec.IvParameterSpec;
+
+
+
+
+public class abc_aes_assignment {
+    private static String encryptionKey = "ABCABCABCABCABCX";
+    private static String aespadding = "AES/CBC/PKCS5PADDING";
+
+    public static void main(String[] args) {
+        try (
+
+                Scanner userInput = new Scanner(System.in)) {
+            System.out.println("enter the string to be encrypted");
+            String text = userInput.nextLine();
+            String cipheredTxt = encryption(text);
+            String decipheredTxt = decryption(cipheredTxt);
+
+            System.out.println("Plain   String  : " + text);
+            System.out.println("Encrypt String  : " + cipheredTxt);
+            System.out.println("Decrypt String  : " + decipheredTxt);
+        }
+    }
+
+    public static String encryption(String text) {
+        String encString = "";
+        try {
+            Cipher cipher = Cipher.getInstance(aespadding);
+            byte[] key = encryptionKey.getBytes("UTF-8");
+            SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
+            IvParameterSpec ivparameterspec = new IvParameterSpec(key);
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivparameterspec);
+            byte[] cipherText = cipher.doFinal(text.getBytes("UTF8"));
+            Base64.Encoder encoder = Base64.getEncoder();
+            encString = encoder.encodeToString(cipherText);
+
+        } catch (Exception any) {
+            System.err.println("Encrypt Exception : " + any.getMessage());
+        }
+        return encString;
+    }
+
+    public static String decryption(String encryptdText) {
+        String decText = "";
+        try {
+            Cipher cipher = Cipher.getInstance(aespadding);
+            byte[] key = encryptionKey.getBytes("UTF-8");
+            SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
+            IvParameterSpec ivparameterspec = new IvParameterSpec(key);
+            cipher.init(Cipher.DECRYPT_MODE, secretKey, ivparameterspec);
+            Base64.Decoder decoder = Base64.getDecoder();
+            byte[] cipherText = decoder.decode(encryptdText.getBytes("UTF8"));
+            decText = new String(cipher.doFinal(cipherText), "UTF-8");
+
+        } catch (Exception any) {
+            System.err.println("decrypt Exception : " + any.getMessage());
+        }
+        return decText;
+    }
+}
