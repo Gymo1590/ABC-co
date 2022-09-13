@@ -1,0 +1,17 @@
+txn Fee
+int 10000
+<=
+arg 0
+len
+int 73
+==
+&&
+arg 0
+sha256
+byte base64 30AT2gOReDBdJmLBO/DgvjC6hIXgACecTpFDcP1bJHU=
+==
+&&
+txn CloseRemainderTo
+txn Receiver 
+==
+&&
